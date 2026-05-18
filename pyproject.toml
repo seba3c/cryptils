@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryptils"
-version = "0.1.0"
-description = "A precise utility library for representing cryptocurrency amounts"
+version = "0.1.0a1"
+description = "A simple python utility library for representing cryptocurrency amounts"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
@@ -40,9 +40,11 @@ select = ["E", "F", "I", "W", "UP", "B", "C4", "SIM"]
 quote-style = "double"
 indent-style = "space"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
+    "pre-commit>=3.0",
     "pytest>=8.0",
     "ruff>=0.15.13",
     "tox>=4.0",
+    "tox-uv>=1.0",
 ]

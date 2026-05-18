@@ -53,6 +53,12 @@ uv run tox
 # Format and lint
 uv run ruff check --fix .
 uv run ruff format .
+
+# Install pre-commit hooks
+uv run pre-commit install
+
+# Run pre-commit on all files
+uv run pre-commit run --all-files
 ```
 
 ## License
