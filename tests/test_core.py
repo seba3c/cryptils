@@ -1,6 +1,6 @@
 import pytest
 
-from cryptils.core import CryptoAmount
+from cryptils._core import CryptoAmount
 
 
 def test_crypto_amount_cannot_be_instantiated():

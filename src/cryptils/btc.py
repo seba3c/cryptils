@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .core import CryptoAmount
+from ._core import CryptoAmount
 
 
 class BTC(CryptoAmount):
