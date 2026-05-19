@@ -2,8 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from cryptils import BTC
-from cryptils.eth import ETH
+from cryptils import BTC, ETH
 
 
 def test_btc_name():

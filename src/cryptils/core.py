@@ -21,6 +21,8 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         return self._symbol
 
     def __init__(self, value: _number_or_str) -> None:
+        if type(self) is CryptoAmount:
+            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated directly")
         self._value = self._to_decimal(value)
 
     def _to_decimal(self, value: _number_or_str) -> Decimal:
