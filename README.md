@@ -1,5 +1,7 @@
 # Cryptils
 
+![Tests](https://github.com/seba/cryptils/actions/workflows/tests.yml/badge.svg)
+
 ---
 
 ## Installation
