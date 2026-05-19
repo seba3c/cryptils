@@ -4,7 +4,7 @@
 ![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-A simple lib for handling cryptocurrencies formatting and precision
+An utility library for representing cryptocurrency amounts in Python.
 
 ## Installation
 
