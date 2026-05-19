@@ -1,3 +1,3 @@
-from .btc import BTC, Sats
+from .btc import BTC
 
-__all__ = ["BTC", "Sats"]
+__all__ = ["BTC"]

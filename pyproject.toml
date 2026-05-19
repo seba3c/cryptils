@@ -20,7 +20,7 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-test = ["pytest>=8.0", "tox>=4.0"]
+test = ["pytest>=8.0", "pytest-cov>=4.0", "tox>=4.0"]
 
 [project.urls]
 Homepage = "https://github.com/seba/cryptils"
@@ -40,10 +40,19 @@ select = ["E", "F", "I", "W", "UP", "B", "C4", "SIM"]
 quote-style = "double"
 indent-style = "space"
 
+[tool.coverage.run]
+source = ["src/cryptils"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = false
+
 [dependency-groups]
 dev = [
     "pre-commit>=3.0",
     "pytest>=8.0",
+    "pytest-cov>=4.0",
     "ruff>=0.15.13",
     "tox>=4.0",
     "tox-uv>=1.0",
