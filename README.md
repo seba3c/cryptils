@@ -1,4 +1,4 @@
-# Cryptils
+# cryptils
 
 ![Tests](https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg)
 ![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
