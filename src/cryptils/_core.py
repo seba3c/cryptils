@@ -35,7 +35,7 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         return f"{self._value:.{self._decimals}f} {self._symbol}"
 
     def __str__(self) -> str:
-        return self.to_string()
+        return str(self._value)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.to_string()})"
