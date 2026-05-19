@@ -1,6 +1,6 @@
-# cryptils
+# Cryptils
 
-A precise utility library for representing cryptocurrency amounts in Python.
+---
 
 ## Installation
 
@@ -11,29 +11,34 @@ pip install cryptils
 ## Quick Start
 
 ```python
-from cryptils import BTC, Sats
+from cryptils import BTC, ETH, USDC, USDT
 
-# Create BTC amounts with exact decimal precision
+# Create amounts with exact decimal precision
 btc = BTC("1.5")
 print(btc)  # 1.50000000 BTC
 
-# Convert between BTC and satoshis
-sats = btc.to_sats()
-print(sats)  # 150000000 sats
-
-# Convert back
-back_to_btc = sats.to_btc()
-print(back_to_btc)  # 1.50000000 BTC
+eth = ETH("2.0")
+print(eth)  # 2.000000000000000000 ETH
 
 # Arithmetic
 result = BTC("0.5") + BTC("0.25")
 print(result)  # 0.75000000 BTC
+
+# Different currencies maintain their own precision
+usdc = USDC("100")
+print(usdc)  # 100.000000 USDC
+
+# Access the raw Decimal value
+print(btc.as_decimal())  # Decimal('1.50000000')
+
+# Get the formatted string explicitly
+print(btc.to_string())  # 1.50000000 BTC
 ```
 
 ## Features
 
 - Uses `decimal.Decimal` internally to avoid floating-point errors.
-- Type-safe conversions between units (e.g., BTC and Satoshis).
+- Consistent precision handling per currency (e.g., 8 decimals for BTC, 6 for USDC).
 - Simple, explicit API designed for financial precision.
 
 ## Development
