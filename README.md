@@ -2,6 +2,7 @@
 
 ![Tests](https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg)
 ![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Installation
 
@@ -69,4 +70,4 @@ uv run pre-commit run --all-files
 
 ## License
 
-MIT
+[MIT](./LICENSE)
