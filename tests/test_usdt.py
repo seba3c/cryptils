@@ -6,11 +6,17 @@ from cryptils import BTC, USDT
 
 
 def test_usdt_name():
-    assert USDT._name == "Tether"
+    assert USDT(0).name == "Tether"
 
 
-def test_usdt_symbol():
-    assert USDT._symbol == "USDT"
+def test_usdt_code():
+    assert USDT(0).code == "USDT"
+
+
+def test_usdt_new_instance():
+    assert USDT("1.5") == USDT(1.5)
+    assert USDT("1") == USDT(1)
+    assert USDT("1.5") == USDT(Decimal("1.5"))
 
 
 def test_usdt_precision():
@@ -27,7 +33,7 @@ def test_usdt_str():
 
 
 def test_usdt_repr():
-    assert repr(USDT("1.5")) == "USDT(1.500000 USDT)"
+    assert repr(USDT("1.5")) == "USDT(1.500000)"
 
 
 def test_usdt_hash():
@@ -61,8 +67,9 @@ def test_usdt_addition_with_float():
     assert USDT("0.5") + 0.5 == USDT("1.0")
 
 
-def test_usdt_addition_with_str():
-    assert USDT("0.5") + "0.5" == USDT("1.0")
+def test_usdt_addition_with_str_raises():
+    with pytest.raises(TypeError):
+        USDT("0.5") + "0.5"
 
 
 def test_usdt_reverse_addition_with_int():
@@ -85,8 +92,9 @@ def test_usdt_subtraction_with_float():
     assert USDT("1.5") - 0.5 == USDT("1.0")
 
 
-def test_usdt_subtraction_with_str():
-    assert USDT("1.5") - "0.5" == USDT("1.0")
+def test_usdt_subtraction_with_str_raises():
+    with pytest.raises(TypeError):
+        USDT("1.5") - "0.5"
 
 
 def test_usdt_reverse_subtraction_with_int():
@@ -105,8 +113,9 @@ def test_usdt_multiplication_with_float():
     assert USDT("1") * 2.0 == USDT("2")
 
 
-def test_usdt_multiplication_with_str():
-    assert USDT("1") * "2" == USDT("2")
+def test_usdt_multiplication_with_str_raises():
+    with pytest.raises(TypeError):
+        USDT("1") * "2"
 
 
 def test_usdt_reverse_multiplication_with_int():
@@ -130,8 +139,9 @@ def test_usdt_division_with_float():
     assert USDT("2") / 2.0 == USDT("1")
 
 
-def test_usdt_division_with_str():
-    assert USDT("2") / "2" == USDT("1")
+def test_usdt_division_with_str_raises():
+    with pytest.raises(TypeError):
+        USDT("2") / "2"
 
 
 def test_usdt_reverse_division_with_int():
@@ -159,7 +169,7 @@ def test_usdt_equality_with_float():
 
 
 def test_usdt_equality_with_str():
-    assert USDT("1.5") == "1.5"
+    assert (USDT("1.5") == "1.5") is False
     assert (USDT("1.5") == "2.5") is False
 
 
@@ -193,9 +203,9 @@ def test_usdt_less_than_with_float():
     assert not USDT("1") < 1.0
 
 
-def test_usdt_less_than_with_str():
-    assert USDT("1") < "2"
-    assert not USDT("1") < "1"
+def test_usdt_less_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert USDT("1") < "2"
 
 
 def test_usdt_less_than_with_same_class():
@@ -224,9 +234,9 @@ def test_usdt_greater_than_with_float():
     assert not USDT("1") > 1.0
 
 
-def test_usdt_greater_than_with_str():
-    assert USDT("2") > "1"
-    assert not USDT("1") > "1"
+def test_usdt_greater_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert USDT("2") > "1"
 
 
 def test_usdt_greater_than_with_same_class():
@@ -244,7 +254,6 @@ def test_usdt_comparison_with_zero():
     assert USDT("0") == 0
     assert USDT("0") == Decimal("0")
     assert USDT("0") == 0.0
-    assert USDT("0") == "0"
     assert USDT("0") == USDT("0")
     assert USDT("1") > 0
     assert USDT("-1") < 0
@@ -306,7 +315,6 @@ def test_usdt_comparison_with_negative():
     assert USDT("-1") == -1
     assert USDT("-1.5") == Decimal("-1.5")
     assert USDT("-1.5") == -1.5
-    assert USDT("-1.5") == "-1.5"
     assert USDT("-1.5") == USDT("-1.5")
     assert USDT("-1") < 0
     assert USDT("-1") < USDT("0")

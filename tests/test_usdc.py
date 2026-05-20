@@ -6,11 +6,17 @@ from cryptils import BTC, USDC
 
 
 def test_usdc_name():
-    assert USDC._name == "USD Coin"
+    assert USDC(0).name == "USD Coin"
 
 
-def test_usdc_symbol():
-    assert USDC._symbol == "USDC"
+def test_usdc_code():
+    assert USDC(0).code == "USDC"
+
+
+def test_usdc_new_instance():
+    assert USDC("1.5") == USDC(1.5)
+    assert USDC("1") == USDC(1)
+    assert USDC("1.5") == USDC(Decimal("1.5"))
 
 
 def test_usdc_precision():
@@ -27,7 +33,7 @@ def test_usdc_str():
 
 
 def test_usdc_repr():
-    assert repr(USDC("1.5")) == "USDC(1.500000 USDC)"
+    assert repr(USDC("1.5")) == "USDC(1.500000)"
 
 
 def test_usdc_hash():
@@ -61,8 +67,9 @@ def test_usdc_addition_with_float():
     assert USDC("0.5") + 0.5 == USDC("1.0")
 
 
-def test_usdc_addition_with_str():
-    assert USDC("0.5") + "0.5" == USDC("1.0")
+def test_usdc_addition_with_str_raises():
+    with pytest.raises(TypeError):
+        USDC("0.5") + "0.5"
 
 
 def test_usdc_reverse_addition_with_int():
@@ -85,8 +92,9 @@ def test_usdc_subtraction_with_float():
     assert USDC("1.5") - 0.5 == USDC("1.0")
 
 
-def test_usdc_subtraction_with_str():
-    assert USDC("1.5") - "0.5" == USDC("1.0")
+def test_usdc_subtraction_with_str_raises():
+    with pytest.raises(TypeError):
+        USDC("1.5") - "0.5"
 
 
 def test_usdc_reverse_subtraction_with_int():
@@ -105,8 +113,9 @@ def test_usdc_multiplication_with_float():
     assert USDC("1") * 2.0 == USDC("2")
 
 
-def test_usdc_multiplication_with_str():
-    assert USDC("1") * "2" == USDC("2")
+def test_usdc_multiplication_with_str_raises():
+    with pytest.raises(TypeError):
+        USDC("1") * "2"
 
 
 def test_usdc_reverse_multiplication_with_int():
@@ -130,8 +139,9 @@ def test_usdc_division_with_float():
     assert USDC("2") / 2.0 == USDC("1")
 
 
-def test_usdc_division_with_str():
-    assert USDC("2") / "2" == USDC("1")
+def test_usdc_division_with_str_raises():
+    with pytest.raises(TypeError):
+        USDC("2") / "2"
 
 
 def test_usdc_reverse_division_with_int():
@@ -159,7 +169,7 @@ def test_usdc_equality_with_float():
 
 
 def test_usdc_equality_with_str():
-    assert USDC("1.5") == "1.5"
+    assert (USDC("1.5") == "1.5") is False
     assert (USDC("1.5") == "2.5") is False
 
 
@@ -193,9 +203,9 @@ def test_usdc_less_than_with_float():
     assert not USDC("1") < 1.0
 
 
-def test_usdc_less_than_with_str():
-    assert USDC("1") < "2"
-    assert not USDC("1") < "1"
+def test_usdc_less_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert USDC("1") < "2"
 
 
 def test_usdc_less_than_with_same_class():
@@ -224,9 +234,9 @@ def test_usdc_greater_than_with_float():
     assert not USDC("1") > 1.0
 
 
-def test_usdc_greater_than_with_str():
-    assert USDC("2") > "1"
-    assert not USDC("1") > "1"
+def test_usdc_greater_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert USDC("2") > "1"
 
 
 def test_usdc_greater_than_with_same_class():
@@ -244,7 +254,6 @@ def test_usdc_comparison_with_zero():
     assert USDC("0") == 0
     assert USDC("0") == Decimal("0")
     assert USDC("0") == 0.0
-    assert USDC("0") == "0"
     assert USDC("0") == USDC("0")
     assert USDC("1") > 0
     assert USDC("-1") < 0
@@ -306,7 +315,6 @@ def test_usdc_comparison_with_negative():
     assert USDC("-1") == -1
     assert USDC("-1.5") == Decimal("-1.5")
     assert USDC("-1.5") == -1.5
-    assert USDC("-1.5") == "-1.5"
     assert USDC("-1.5") == USDC("-1.5")
     assert USDC("-1") < 0
     assert USDC("-1") < USDC("0")

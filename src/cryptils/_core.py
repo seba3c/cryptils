@@ -4,12 +4,13 @@ from abc import ABCMeta
 from decimal import Decimal
 from typing import Any, ClassVar, TypeAlias
 
-_number_or_str: TypeAlias = Decimal | int | float | str
+_arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
+_instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
 class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
     _name: ClassVar[str] = ""
-    _symbol: ClassVar[str] = ""
+    _code: ClassVar[str] = ""
     _decimals: ClassVar[int] = 0
 
     @property
@@ -17,31 +18,34 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         return self._name
 
     @property
-    def symbol(self) -> str:
-        return self._symbol
+    def code(self) -> str:
+        return self._code
 
-    def __init__(self, value: _number_or_str) -> None:
+    def __init__(self, value: _instance_compatible) -> None:
         if type(self) is CryptoAmount:
             raise TypeError("CryptoAmount is an abstract class and cannot be instantiated directly")
-        self._value = self._to_decimal(value)
+        if type(value) is self.__class__:
+            self._value = self._to_decimal(value.as_decimal())
+        else:
+            self._value = self._to_decimal(value)
 
-    def _to_decimal(self, value: _number_or_str) -> Decimal:
+    def _to_decimal(self, value: _arithmetic_comparison_compatible) -> Decimal:
         return Decimal(value).quantize(Decimal(10) ** -self._decimals)
 
     def as_decimal(self) -> Decimal:
         return self._value
 
     def to_string(self):
-        return f"{self._value:.{self._decimals}f} {self._symbol}"
+        return f"{self._value:.{self._decimals}f} {self._code}"
 
     def __str__(self) -> str:
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.to_string()})"
+        return f"{self.__class__.__name__}({self.as_decimal()})"
 
     def _is_compatible(self, other: Any) -> bool:
-        return isinstance(other, _number_or_str)
+        return isinstance(other, _arithmetic_comparison_compatible)
 
     def _compare(self, other: Any) -> Decimal:
         if isinstance(other, self.__class__):

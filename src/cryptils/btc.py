@@ -5,5 +5,5 @@ from ._core import CryptoAmount
 
 class BTC(CryptoAmount):
     _name = "Bitcoin"
-    _symbol = "BTC"
+    _code = "BTC"
     _decimals = 8

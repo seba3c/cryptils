@@ -5,5 +5,5 @@ from ._core import CryptoAmount
 
 class ETH(CryptoAmount):
     _name = "Ethereum"
-    _symbol = "ETH"
+    _code = "ETH"
     _decimals = 18
