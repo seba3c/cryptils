@@ -27,7 +27,7 @@ def test_btc_str():
 
 
 def test_btc_repr():
-    assert repr(BTC("1.5")) == "BTC(1.50000000 BTC)"
+    assert repr(BTC("1.5")) == "BTC(1.50000000)"
 
 
 def test_btc_hash():

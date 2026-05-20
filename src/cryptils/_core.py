@@ -38,7 +38,7 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.to_string()})"
+        return f"{self.__class__.__name__}({self.as_decimal()})"
 
     def _is_compatible(self, other: Any) -> bool:
         return isinstance(other, _number_or_str)

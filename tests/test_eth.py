@@ -27,7 +27,7 @@ def test_eth_str():
 
 
 def test_eth_repr():
-    assert repr(ETH("1.5")) == "ETH(1.500000000000000000 ETH)"
+    assert repr(ETH("1.5")) == "ETH(1.500000000000000000)"
 
 
 def test_eth_hash():

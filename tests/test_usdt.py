@@ -27,7 +27,7 @@ def test_usdt_str():
 
 
 def test_usdt_repr():
-    assert repr(USDT("1.5")) == "USDT(1.500000 USDT)"
+    assert repr(USDT("1.5")) == "USDT(1.500000)"
 
 
 def test_usdt_hash():

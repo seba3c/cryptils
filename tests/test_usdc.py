@@ -27,7 +27,7 @@ def test_usdc_str():
 
 
 def test_usdc_repr():
-    assert repr(USDC("1.5")) == "USDC(1.500000 USDC)"
+    assert repr(USDC("1.5")) == "USDC(1.500000)"
 
 
 def test_usdc_hash():
