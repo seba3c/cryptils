@@ -44,11 +44,15 @@ def test_usdt_hash():
 
 
 def test_usdt_to_string():
-    assert USDT("1.5").to_string() == "1.500000 USDT"
+    assert USDT("1.5").to_string() == "USDT 1.500000"
 
 
-def test_usdt_as_decimal():
-    assert USDT("1.5").as_decimal() == Decimal("1.50000")
+def test_usdt_to_decimal():
+    assert USDT("1.5").to_decimal() == Decimal("1.50000")
+
+
+def test_usdt_to_float():
+    assert USDT("1.5").to_float() == 1.50000
 
 
 def test_usdt_addition_same_class():

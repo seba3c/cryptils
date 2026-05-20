@@ -44,11 +44,15 @@ def test_btc_hash():
 
 
 def test_btc_to_string():
-    assert BTC("1.5").to_string() == "1.50000000 BTC"
+    assert BTC("1.5").to_string() == "BTC 1.50000000"
 
 
-def test_btc_as_decimal():
-    assert BTC("1.5").as_decimal() == Decimal("1.5000000")
+def test_btc_to_decimal():
+    assert BTC("1.5").to_decimal() == Decimal("1.5000000")
+
+
+def test_btc_to_float():
+    assert BTC("1.5").to_float() == 1.5000000
 
 
 def test_btc_addition_same_class():

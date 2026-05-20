@@ -44,11 +44,15 @@ def test_usdc_hash():
 
 
 def test_usdc_to_string():
-    assert USDC("1.5").to_string() == "1.500000 USDC"
+    assert USDC("1.5").to_string() == "USDC 1.500000"
 
 
-def test_usdc_as_decimal():
-    assert USDC("1.5").as_decimal() == Decimal("1.50000")
+def test_usdc_to_decimal():
+    assert USDC("1.5").to_decimal() == Decimal("1.50000")
+
+
+def test_usdc_to_float():
+    assert USDC("1.5").to_float() == 1.50000
 
 
 def test_usdc_addition_same_class():

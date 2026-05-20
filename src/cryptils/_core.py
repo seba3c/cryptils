@@ -34,17 +34,20 @@ class CryptoAmount(PydanticMixin, metaclass=ABCMeta):  # noqa: B024
     def _to_decimal(self, value: _arithmetic_comparison_compatible) -> Decimal:
         return Decimal(value).quantize(Decimal(10) ** -self._decimals)
 
-    def as_decimal(self) -> Decimal:
+    def to_decimal(self) -> Decimal:
         return self._value
 
-    def to_string(self):
-        return f"{self._value:.{self._decimals}f} {self._code}"
+    def to_string(self) -> str:
+        return f"{self._code} {self._value}"
+
+    def to_float(self) -> float:
+        return float(self._value)
 
     def __str__(self) -> str:
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.as_decimal()})"
+        return f"{self.__class__.__name__}({self.to_decimal()})"
 
     def _is_compatible(self, other: Any) -> bool:
         return isinstance(other, _arithmetic_comparison_compatible)
