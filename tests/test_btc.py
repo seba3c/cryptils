@@ -62,7 +62,8 @@ def test_btc_addition_with_float():
 
 
 def test_btc_addition_with_str():
-    assert BTC("0.5") + "0.5" == BTC("1.0")
+    with pytest.raises(TypeError):
+        assert BTC("0.5") + "0.5"
 
 
 def test_btc_reverse_addition_with_int():
@@ -85,8 +86,9 @@ def test_btc_subtraction_with_float():
     assert BTC("1.5") - 0.5 == BTC("1.0")
 
 
-def test_btc_subtraction_with_str():
-    assert BTC("1.5") - "0.5" == BTC("1.0")
+def test_btc_subtraction_with_str_raises():
+    with pytest.raises(TypeError):
+        BTC("1.5") - "0.5"
 
 
 def test_btc_reverse_subtraction_with_int():
@@ -105,8 +107,9 @@ def test_btc_multiplication_with_float():
     assert BTC("1") * 2.0 == BTC("2")
 
 
-def test_btc_multiplication_with_str():
-    assert BTC("1") * "2" == BTC("2")
+def test_btc_multiplication_with_str_raises():
+    with pytest.raises(TypeError):
+        assert BTC("1") * "2"
 
 
 def test_btc_reverse_multiplication_with_int():
@@ -130,8 +133,9 @@ def test_btc_division_with_float():
     assert BTC("2") / 2.0 == BTC("1")
 
 
-def test_btc_division_with_str():
-    assert BTC("2") / "2" == BTC("1")
+def test_btc_division_with_str_raises():
+    with pytest.raises(TypeError):
+        assert BTC("2") / "2"
 
 
 def test_btc_reverse_division_with_int():
@@ -159,8 +163,7 @@ def test_btc_equality_with_float():
 
 
 def test_btc_equality_with_str():
-    assert BTC("1.5") == "1.5"
-    assert (BTC("1.5") == "2.5") is False
+    assert (BTC("1.5") == "1.5") is False
 
 
 def test_btc_equality_with_same_class():
@@ -193,9 +196,9 @@ def test_btc_less_than_with_float():
     assert not BTC("1") < 1.0
 
 
-def test_btc_less_than_with_str():
-    assert BTC("1") < "2"
-    assert not BTC("1") < "1"
+def test_btc_less_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert BTC("1") < "2"
 
 
 def test_btc_less_than_with_same_class():
@@ -224,9 +227,9 @@ def test_btc_greater_than_with_float():
     assert not BTC("1") > 1.0
 
 
-def test_btc_greater_than_with_str():
-    assert BTC("2") > "1"
-    assert not BTC("1") > "1"
+def test_btc_greater_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert BTC("2") > "1"
 
 
 def test_btc_greater_than_with_same_class():
@@ -244,7 +247,6 @@ def test_btc_comparison_with_zero():
     assert BTC("0") == 0
     assert BTC("0") == Decimal("0")
     assert BTC("0") == 0.0
-    assert BTC("0") == "0"
     assert BTC("0") == BTC("0")
     assert BTC("1") > 0
     assert BTC("-1") < 0
@@ -306,7 +308,6 @@ def test_btc_comparison_with_negative():
     assert BTC("-1") == -1
     assert BTC("-1.5") == Decimal("-1.5")
     assert BTC("-1.5") == -1.5
-    assert BTC("-1.5") == "-1.5"
     assert BTC("-1.5") == BTC("-1.5")
     assert BTC("-1") < 0
     assert BTC("-1") < BTC("0")

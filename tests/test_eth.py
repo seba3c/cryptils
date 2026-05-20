@@ -61,8 +61,9 @@ def test_eth_addition_with_float():
     assert ETH("0.5") + 0.5 == ETH("1.0")
 
 
-def test_eth_addition_with_str():
-    assert ETH("0.5") + "0.5" == ETH("1.0")
+def test_eth_addition_with_str_raises():
+    with pytest.raises(TypeError):
+        ETH("0.5") + "0.5"
 
 
 def test_eth_reverse_addition_with_int():
@@ -85,8 +86,9 @@ def test_eth_subtraction_with_float():
     assert ETH("1.5") - 0.5 == ETH("1.0")
 
 
-def test_eth_subtraction_with_str():
-    assert ETH("1.5") - "0.5" == ETH("1.0")
+def test_eth_subtraction_with_str_raises():
+    with pytest.raises(TypeError):
+        ETH("1.5") - "0.5"
 
 
 def test_eth_reverse_subtraction_with_int():
@@ -105,8 +107,9 @@ def test_eth_multiplication_with_float():
     assert ETH("1") * 2.0 == ETH("2")
 
 
-def test_eth_multiplication_with_str():
-    assert ETH("1") * "2" == ETH("2")
+def test_eth_multiplication_with_str_raises():
+    with pytest.raises(TypeError):
+        ETH("1") * "2"
 
 
 def test_eth_reverse_multiplication_with_int():
@@ -130,8 +133,9 @@ def test_eth_division_with_float():
     assert ETH("2") / 2.0 == ETH("1")
 
 
-def test_eth_division_with_str():
-    assert ETH("2") / "2" == ETH("1")
+def test_eth_division_with_str_raises():
+    with pytest.raises(TypeError):
+        ETH("2") / "2"
 
 
 def test_eth_reverse_division_with_int():
@@ -159,7 +163,7 @@ def test_eth_equality_with_float():
 
 
 def test_eth_equality_with_str():
-    assert ETH("1.5") == "1.5"
+    assert (ETH("1.5") == "1.5") is False
     assert (ETH("1.5") == "2.5") is False
 
 
@@ -193,9 +197,9 @@ def test_eth_less_than_with_float():
     assert not ETH("1") < 1.0
 
 
-def test_eth_less_than_with_str():
-    assert ETH("1") < "2"
-    assert not ETH("1") < "1"
+def test_eth_less_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert ETH("1") < "2"
 
 
 def test_eth_less_than_with_same_class():
@@ -224,9 +228,9 @@ def test_eth_greater_than_with_float():
     assert not ETH("1") > 1.0
 
 
-def test_eth_greater_than_with_str():
-    assert ETH("2") > "1"
-    assert not ETH("1") > "1"
+def test_eth_greater_than_with_str_raises():
+    with pytest.raises(TypeError):
+        assert ETH("2") > "1"
 
 
 def test_eth_greater_than_with_same_class():
@@ -244,7 +248,6 @@ def test_eth_comparison_with_zero():
     assert ETH("0") == 0
     assert ETH("0") == Decimal("0")
     assert ETH("0") == 0.0
-    assert ETH("0") == "0"
     assert ETH("0") == ETH("0")
     assert ETH("1") > 0
     assert ETH("-1") < 0
@@ -306,7 +309,6 @@ def test_eth_comparison_with_negative():
     assert ETH("-1") == -1
     assert ETH("-1.5") == Decimal("-1.5")
     assert ETH("-1.5") == -1.5
-    assert ETH("-1.5") == "-1.5"
     assert ETH("-1.5") == ETH("-1.5")
     assert ETH("-1") < 0
     assert ETH("-1") < ETH("0")
