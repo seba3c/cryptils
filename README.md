@@ -63,6 +63,26 @@ print(btc.to_string())  # 1.50000000 BTC
 - Consistent precision handling per currency (e.g., 8 decimals for BTC, 6 for USDC).
 - Simple, explicit API designed for financial precision.
 
+## Pydantic Support
+
+CryptoAmount subclasses work as Pydantic v2 field types:
+
+```python
+from pydantic import BaseModel
+from cryptils import BTC, ETH, USDC
+
+class WalletBalance(BaseModel):
+    btc: BTC
+    eth: ETH
+    usdc: USDC
+
+wallet = WalletBalance(btc="1.5", eth=2, usdc=100.0)
+print(wallet.model_dump_json())
+# {"btc":"1.50000000","eth":"2.000000000000000000","usdc":"100.000000"}
+```
+
+Requires Pydantic v2 (`pip install pydantic`).
+
 ## Development
 
 This project uses [uv](https://docs.astral.sh/uv/) for environment management, [ruff](https://docs.astral.sh/ruff/) for linting and formatting, and [tox](https://tox.wiki/) for testing across Python versions.
