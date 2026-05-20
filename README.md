@@ -3,7 +3,7 @@
 ![Tests](https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg)
 ![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![PyPI](https://img.shields.io/pypi/v/cryptils)
+![PyPI](https://img.shields.io/pypi/v/cryptils?include_prereleases)
 ![TestPyPI](https://img.shields.io/badge/testpypi-v0.1.0a1-blue)
 
 An utility library for representing cryptocurrency amounts in Python.
