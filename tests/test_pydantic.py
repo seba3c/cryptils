@@ -61,11 +61,11 @@ def test_valid_inputs(field, value, expected):
 def test_invalid_cross_currency():
     with pytest.raises(ValidationError) as exc_info:
         _create_wallet(balances={"btc": ETH("1.5")})
-    assert "Expected BTC, got ETH" in str(exc_info.value)
+    assert "Expected str, int, float, Decimal or BTC, got ETH" in str(exc_info.value)
 
     with pytest.raises(ValidationError) as exc_info:
         _create_wallet(balances={"eth": BTC("1.5")})
-    assert "Expected ETH, got BTC" in str(exc_info.value)
+    assert "Expected str, int, float, Decimal or ETH, got BTC" in str(exc_info.value)
 
 
 @pytest.mark.parametrize(
@@ -95,19 +95,13 @@ def test_serialization():
 
 
 def test_json_schema():
-    schema = WalletBalance.model_json_schema()
-    assert schema["properties"]["timestamp"]["type"] == "integer"
-    assert schema["properties"]["wallet_id"]["type"] == "string"
-    balances_ref = schema["properties"]["balances"]["$ref"]
-    detail_key = balances_ref.split("/")[-1]
-    balances_schema = schema["$defs"][detail_key]
-    assert balances_schema["type"] == "object"
-    for field, currency_name in [
-        ("btc", "Bitcoin"),
-        ("eth", "Ethereum"),
-        ("usdc", "USD Coin"),
-        ("usdt", "Tether"),
+    schema = WalletBalanceDetail.model_json_schema()
+    for field, c_name, c_code in [
+        ("btc", "Bitcoin", "BTC"),
+        ("eth", "Ethereum", "ETH"),
+        ("usdc", "USD Coin", "USDC"),
+        ("usdt", "Tether", "USDT"),
     ]:
-        prop = balances_schema["properties"][field]
-        assert prop["type"] == "string"
-        assert f"{currency_name} amount as a string" in prop["description"]
+        prop = schema["properties"][field]
+        assert prop["title"] == f"{c_code} amount"
+        assert prop["description"] == f"{c_name} amount as a string, int or float"

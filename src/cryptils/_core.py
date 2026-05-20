@@ -4,16 +4,22 @@ from abc import ABCMeta
 from decimal import Decimal
 from typing import Any, ClassVar, TypeAlias
 
-from ._pydantic import PydanticMixin
+try:
+    from pydantic import GetCoreSchemaHandler
+    from pydantic.json_schema import JsonSchemaValue
+    from pydantic_core import core_schema as cs
+except ImportError:
+    pass
+
 
 _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount(PydanticMixin, metaclass=ABCMeta):
-    _name: ClassVar[str] = ""
-    _code: ClassVar[str] = ""
-    _decimals: ClassVar[int] = 0
+class CryptoAmount(metaclass=ABCMeta):
+    _name: ClassVar[str]
+    _code: ClassVar[str]
+    _decimals: ClassVar[int]
 
     @property
     def name(self) -> str:
@@ -49,8 +55,13 @@ class CryptoAmount(PydanticMixin, metaclass=ABCMeta):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.to_decimal()})"
 
-    def _is_compatible(self, other: Any) -> bool:
+    @classmethod
+    def _is_compatible(cls, other: Any) -> bool:
         return isinstance(other, _arithmetic_comparison_compatible)
+
+    @classmethod
+    def _is_instance_compatible(cls, other: Any) -> bool:
+        return isinstance(other, _instance_compatible)
 
     def _compare(self, other: Any) -> Decimal:
         if isinstance(other, self.__class__):
@@ -135,3 +146,42 @@ class CryptoAmount(PydanticMixin, metaclass=ABCMeta):
         if self._is_compatible(other):
             return self.__class__(self._to_decimal(other) / self._value)
         return NotImplemented
+
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source: type[Any], handler: GetCoreSchemaHandler
+    ) -> cs.CoreSchema:
+
+        return cs.no_info_after_validator_function(
+            cls.__pydantic_validate,
+            cs.any_schema(),
+            serialization=cs.plain_serializer_function_ser_schema(
+                cls.__pydantic_serialize,
+                info_arg=False,
+                return_schema=cs.str_schema(),
+            ),
+        )
+
+    @classmethod
+    def __pydantic_validate(cls, value: Any) -> CryptoAmount:
+        if isinstance(value, cls):
+            return value
+        if cls._is_instance_compatible(value):
+            return cls(value)
+        raise ValueError(
+            f"Expected str, int, float, Decimal or {cls.__name__}, got {type(value).__name__}"
+        )
+
+    @staticmethod
+    def __pydantic_serialize(value: CryptoAmount) -> str:
+        return str(value)
+
+    @classmethod
+    def __get_pydantic_json_schema__(
+        cls, core_schema: cs.CoreSchema, handler: GetCoreSchemaHandler
+    ) -> JsonSchemaValue:
+        json_schema = handler(core_schema)
+        json_schema = handler.resolve_ref_schema(json_schema)
+        json_schema["title"] = f"{cls._code} amount"
+        json_schema["description"] = f"{cls._name} amount as a string, int or float"
+        return json_schema

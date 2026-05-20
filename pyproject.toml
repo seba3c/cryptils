@@ -55,7 +55,8 @@ select = [
     "RUF", # ruff-specific rules
 ]
 ignore = [
-    "S101", # assert - pytest relies on assert
+    "S101",  # assert - pytest relies on assert
+    "UP037", # keep quotes in type annotations
 ]
 
 [tool.ruff.format]
