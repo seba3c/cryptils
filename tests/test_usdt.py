@@ -13,6 +13,12 @@ def test_usdt_symbol():
     assert USDT._symbol == "USDT"
 
 
+def test_usdt_new_instance():
+    assert USDT("1.5") == USDT(1.5)
+    assert USDT("1") == USDT(1)
+    assert USDT("1.5") == USDT(Decimal("1.5"))
+
+
 def test_usdt_precision():
     assert USDT("1.0000011") == USDT("1.000001")
     assert USDT("1.0000014") == USDT("1.000001")

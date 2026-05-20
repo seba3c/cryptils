@@ -13,6 +13,12 @@ def test_usdc_symbol():
     assert USDC._symbol == "USDC"
 
 
+def test_usdc_new_instance():
+    assert USDC("1.5") == USDC(1.5)
+    assert USDC("1") == USDC(1)
+    assert USDC("1.5") == USDC(Decimal("1.5"))
+
+
 def test_usdc_precision():
     assert USDC("1.0000011") == USDC("1.000001")
     assert USDC("1.0000014") == USDC("1.000001")

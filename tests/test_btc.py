@@ -13,6 +13,12 @@ def test_btc_symbol():
     assert BTC._symbol == "BTC"
 
 
+def test_btc_new_instance():
+    assert BTC("1.5") == BTC(1.5)
+    assert BTC("1") == BTC(1)
+    assert BTC("1.5") == BTC(Decimal("1.5"))
+
+
 def test_btc_precision():
     assert BTC("1.000000011") == BTC("1.00000001")
     assert BTC("1.000000014") == BTC("1.00000001")

@@ -13,6 +13,12 @@ def test_eth_symbol():
     assert ETH._symbol == "ETH"
 
 
+def test_eth_new_instance():
+    assert ETH("1.5") == ETH(1.5)
+    assert ETH("1") == ETH(1)
+    assert ETH("1.5") == ETH(Decimal("1.5"))
+
+
 def test_eth_precision():
     assert ETH("1.0000000000000000011") == ETH("1.000000000000000001")
     assert ETH("1.0000000000000000014") == ETH("1.000000000000000001")
