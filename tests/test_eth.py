@@ -6,11 +6,11 @@ from cryptils import BTC, ETH
 
 
 def test_eth_name():
-    assert ETH._name == "Ethereum"
+    assert ETH(0).name == "Ethereum"
 
 
-def test_eth_symbol():
-    assert ETH._symbol == "ETH"
+def test_eth_code():
+    assert ETH(0).code == "ETH"
 
 
 def test_eth_new_instance():

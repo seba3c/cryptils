@@ -10,7 +10,7 @@ _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
     _name: ClassVar[str] = ""
-    _symbol: ClassVar[str] = ""
+    _code: ClassVar[str] = ""
     _decimals: ClassVar[int] = 0
 
     @property
@@ -18,8 +18,8 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         return self._name
 
     @property
-    def symbol(self) -> str:
-        return self._symbol
+    def code(self) -> str:
+        return self._code
 
     def __init__(self, value: _instance_compatible) -> None:
         if type(self) is CryptoAmount:
@@ -36,7 +36,7 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         return self._value
 
     def to_string(self):
-        return f"{self._value:.{self._decimals}f} {self._symbol}"
+        return f"{self._value:.{self._decimals}f} {self._code}"
 
     def __str__(self) -> str:
         return str(self._value)

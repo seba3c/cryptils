@@ -6,11 +6,11 @@ from cryptils import BTC, USDT
 
 
 def test_usdt_name():
-    assert USDT._name == "Tether"
+    assert USDT(0).name == "Tether"
 
 
-def test_usdt_symbol():
-    assert USDT._symbol == "USDT"
+def test_usdt_code():
+    assert USDT(0).code == "USDT"
 
 
 def test_usdt_new_instance():

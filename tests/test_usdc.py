@@ -6,11 +6,11 @@ from cryptils import BTC, USDC
 
 
 def test_usdc_name():
-    assert USDC._name == "USD Coin"
+    assert USDC(0).name == "USD Coin"
 
 
-def test_usdc_symbol():
-    assert USDC._symbol == "USDC"
+def test_usdc_code():
+    assert USDC(0).code == "USDC"
 
 
 def test_usdc_new_instance():
