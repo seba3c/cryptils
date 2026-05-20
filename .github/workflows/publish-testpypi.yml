@@ -1,0 +1,33 @@
+name: Publish to TestPyPI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    name: Build and Publish to TestPyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/cryptils
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate timestamp
+        id: timestamp
+        run: echo "timestamp=$(date +%Y%m%d%H%M%S)" >> "$GITHUB_OUTPUT"
+
+      - name: Append timestamp to version
+        run: |
+          sed -i 's/^version = "\(.*\)"/version = "\1+'"${{ steps.timestamp.outputs.timestamp }}"'"/' pyproject.toml
+          grep '^version = ' pyproject.toml
+
+      - uses: astral-sh/setup-uv@v5
+
+      - run: uv build
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/

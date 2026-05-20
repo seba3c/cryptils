@@ -24,8 +24,8 @@ dependencies = []
 test = ["pytest>=8.0", "pytest-cov>=4.0", "tox>=4.0"]
 
 [project.urls]
-Homepage = "https://github.com/seba/cryptils"
-Repository = "https://github.com/seba/cryptils"
+Homepage = "https://github.com/seba3c/cryptils"
+Repository = "https://github.com/seba3c/cryptils"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/cryptils"]
