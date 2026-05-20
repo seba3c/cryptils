@@ -1,12 +1,18 @@
-# cryptils
-
-![Tests](https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![PyPI](https://img.shields.io/pypi/v/cryptils?include_prereleases)
-![TestPyPI](https://img.shields.io/badge/testpypi-v0.1.0a1-blue)
-
-An utility library for representing cryptocurrency amounts in Python.
+<div align="center">
+  <h1>
+    <img src="./assets/bitcoin.svg" width="64" height="64" alt="BTC icon">
+    <br>
+    cryptils
+  </h1>
+  <p>
+    <img src="https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg" alt="Tests">
+    <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
+    <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases" alt="PyPI">
+    <img src="https://img.shields.io/badge/testpypi-v0.1.0a1-blue" alt="TestPyPI">
+  </p>
+  <em>An utility library for representing cryptocurrency amounts in Python.</em>
+</div>
 
 ## Installation
 
@@ -74,4 +80,4 @@ uv run pre-commit run --all-files
 
 ## License
 
-[MIT](./LICENSE)
+This project is licensed under the terms of the [MIT](./LICENSE) license.
