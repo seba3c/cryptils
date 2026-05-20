@@ -1,6 +1,6 @@
 <div align="center">
   <h1>
-    <img src="./assets/bitcoin.svg" width="64" height="64" alt="BTC icon">
+    <img src="https://cdn.simpleicons.org/bitcoin/F7931A" width="64" height="64" alt="BTC icon">
     <br>
     cryptils
   </h1>
