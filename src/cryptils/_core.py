@@ -1,17 +1,22 @@
 from __future__ import annotations
 
-from abc import ABCMeta
 from decimal import Decimal
 from typing import Any, ClassVar, TypeAlias
+
+try:
+    from pydantic_core import core_schema as cs
+except ImportError:
+    cs = None
+
 
 _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
-    _name: ClassVar[str] = ""
-    _code: ClassVar[str] = ""
-    _decimals: ClassVar[int] = 0
+class CryptoAmount:
+    _name: ClassVar[str]
+    _code: ClassVar[str]
+    _decimals: ClassVar[int]
 
     @property
     def name(self) -> str:
@@ -21,31 +26,39 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
     def code(self) -> str:
         return self._code
 
-    def __init__(self, value: _instance_compatible) -> None:
+    def __init__(self, value: Any) -> None:
         if type(self) is CryptoAmount:
-            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated directly")
-        if type(value) is self.__class__:
-            self._value = self._to_decimal(value.as_decimal())
+            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated")
+        if isinstance(value, self.__class__):
+            self._value = value._value
         else:
             self._value = self._to_decimal(value)
 
     def _to_decimal(self, value: _arithmetic_comparison_compatible) -> Decimal:
         return Decimal(value).quantize(Decimal(10) ** -self._decimals)
 
-    def as_decimal(self) -> Decimal:
+    def to_decimal(self) -> Decimal:
         return self._value
 
-    def to_string(self):
-        return f"{self._value:.{self._decimals}f} {self._code}"
+    def to_string(self) -> str:
+        return f"{self._code} {self._value}"
+
+    def to_float(self) -> float:
+        return float(self._value)
 
     def __str__(self) -> str:
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.as_decimal()})"
+        return f"{self.__class__.__name__}({self.to_decimal()})"
 
-    def _is_compatible(self, other: Any) -> bool:
+    @classmethod
+    def _is_compatible(cls, other: Any) -> bool:
         return isinstance(other, _arithmetic_comparison_compatible)
+
+    @classmethod
+    def _is_instance_compatible(cls, other: Any) -> bool:
+        return isinstance(other, _instance_compatible)
 
     def _compare(self, other: Any) -> Decimal:
         if isinstance(other, self.__class__):
@@ -130,3 +143,41 @@ class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
         if self._is_compatible(other):
             return self.__class__(self._to_decimal(other) / self._value)
         return NotImplemented
+
+    # Pydantic support
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: Any) -> Any:
+        if cs is None:
+            raise RuntimeError("pydantic is required for this feature")
+        return cs.no_info_after_validator_function(
+            cls.__pydantic_validate,
+            cs.any_schema(),
+            serialization=cs.plain_serializer_function_ser_schema(
+                cls.__pydantic_serialize,
+                info_arg=False,
+                return_schema=cs.str_schema(),
+            ),
+        )
+
+    @classmethod
+    def __pydantic_validate(cls, value: Any) -> CryptoAmount:
+        if isinstance(value, cls):
+            return value
+        if cls._is_instance_compatible(value):
+            return cls(value)
+        raise ValueError(
+            f"Expected str, int, float, Decimal or {cls.__name__}, got {type(value).__name__}"
+        )
+
+    @staticmethod
+    def __pydantic_serialize(value: CryptoAmount) -> str:
+        return str(value)
+
+    @classmethod
+    def __get_pydantic_json_schema__(cls, core_schema: Any, handler: Any) -> Any:
+        json_schema = handler(core_schema)
+        json_schema = handler.resolve_ref_schema(json_schema)
+        json_schema["title"] = f"{cls._code} amount"
+        json_schema["description"] = f"{cls._name} amount as a string, int or float"
+        return json_schema

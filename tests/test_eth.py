@@ -44,11 +44,15 @@ def test_eth_hash():
 
 
 def test_eth_to_string():
-    assert ETH("1.5").to_string() == "1.500000000000000000 ETH"
+    assert ETH("1.5").to_string() == "ETH 1.500000000000000000"
 
 
-def test_eth_as_decimal():
-    assert ETH("1.5").as_decimal() == Decimal("1.50000000000000000")
+def test_eth_to_decimal():
+    assert ETH("1.5").to_decimal() == Decimal("1.50000000000000000")
+
+
+def test_eth_to_float():
+    assert ETH("1.5").to_float() == 1.50000000000000000
 
 
 def test_eth_addition_same_class():
