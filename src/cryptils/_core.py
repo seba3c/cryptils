@@ -4,11 +4,13 @@ from abc import ABCMeta
 from decimal import Decimal
 from typing import Any, ClassVar, TypeAlias
 
+from ._pydantic import PydanticMixin
+
 _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount(metaclass=ABCMeta):  # noqa: B024
+class CryptoAmount(PydanticMixin, metaclass=ABCMeta):  # noqa: B024
     _name: ClassVar[str] = ""
     _code: ClassVar[str] = ""
     _decimals: ClassVar[int] = 0

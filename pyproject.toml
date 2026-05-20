@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryptils"
-version = "0.1.0a2"
+version = "0.1.0a3"
 description = "A simple python utility library for representing cryptocurrency amounts"
 readme = "README.md"
 license = {text = "MIT"}
@@ -21,7 +21,7 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-test = ["pytest>=8.0", "pytest-cov>=4.0", "tox>=4.0"]
+test = ["pydantic>=2.0", "pytest>=8.0", "pytest-cov>=4.0", "tox>=4.0"]
 
 [project.urls]
 Homepage = "https://github.com/seba3c/cryptils"
@@ -51,6 +51,7 @@ skip_covered = false
 
 [dependency-groups]
 dev = [
+    "pydantic>=2.0",
     "pre-commit>=3.0",
     "pytest>=8.0",
     "pytest-cov>=4.0",
