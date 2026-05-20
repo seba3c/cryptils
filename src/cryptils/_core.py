@@ -10,7 +10,7 @@ _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount(PydanticMixin, metaclass=ABCMeta):  # noqa: B024
+class CryptoAmount(PydanticMixin, metaclass=ABCMeta):
     _name: ClassVar[str] = ""
     _code: ClassVar[str] = ""
     _decimals: ClassVar[int] = 0

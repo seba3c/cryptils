@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 import pytest
-from pydantic import BaseModel, ValidationError  # noqa: E402
+from pydantic import BaseModel, ValidationError
 
 from cryptils import BTC, ETH, USDC, USDT
 
