@@ -1,22 +1,19 @@
 from __future__ import annotations
 
-from abc import ABCMeta
 from decimal import Decimal
 from typing import Any, ClassVar, TypeAlias
 
 try:
-    from pydantic import GetCoreSchemaHandler
-    from pydantic.json_schema import JsonSchemaValue
     from pydantic_core import core_schema as cs
 except ImportError:
-    pass
+    cs = None
 
 
 _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount(metaclass=ABCMeta):
+class CryptoAmount:
     _name: ClassVar[str]
     _code: ClassVar[str]
     _decimals: ClassVar[int]
@@ -29,11 +26,11 @@ class CryptoAmount(metaclass=ABCMeta):
     def code(self) -> str:
         return self._code
 
-    def __init__(self, value: _instance_compatible) -> None:
+    def __init__(self, value: Any) -> None:
         if type(self) is CryptoAmount:
-            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated directly")
-        if type(value) is self.__class__:
-            self._value = self._to_decimal(value.as_decimal())
+            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated")
+        if isinstance(value, self.__class__):
+            self._value = value._value
         else:
             self._value = self._to_decimal(value)
 
@@ -147,11 +144,12 @@ class CryptoAmount(metaclass=ABCMeta):
             return self.__class__(self._to_decimal(other) / self._value)
         return NotImplemented
 
-    @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source: type[Any], handler: GetCoreSchemaHandler
-    ) -> cs.CoreSchema:
+    # Pydantic support
 
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source: type[Any], handler: Any) -> Any:
+        if cs is None:
+            raise RuntimeError("pydantic is required for this feature")
         return cs.no_info_after_validator_function(
             cls.__pydantic_validate,
             cs.any_schema(),
@@ -177,9 +175,7 @@ class CryptoAmount(metaclass=ABCMeta):
         return str(value)
 
     @classmethod
-    def __get_pydantic_json_schema__(
-        cls, core_schema: cs.CoreSchema, handler: GetCoreSchemaHandler
-    ) -> JsonSchemaValue:
+    def __get_pydantic_json_schema__(cls, core_schema: Any, handler: Any) -> Any:
         json_schema = handler(core_schema)
         json_schema = handler.resolve_ref_schema(json_schema)
         json_schema["title"] = f"{cls._code} amount"

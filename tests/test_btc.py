@@ -17,6 +17,7 @@ def test_btc_new_instance():
     assert BTC("1.5") == BTC(1.5)
     assert BTC("1") == BTC(1)
     assert BTC("1.5") == BTC(Decimal("1.5"))
+    assert BTC("1.50000000") == BTC(BTC("1.500000001"))
 
 
 def test_btc_precision():
