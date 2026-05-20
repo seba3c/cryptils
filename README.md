@@ -32,9 +32,19 @@ print(btc)  # 1.50000000 BTC
 eth = ETH("2.0")
 print(eth)  # 2.000000000000000000 ETH
 
-# Arithmetic
+# Arithmetic with other amounts
 result = BTC("0.5") + BTC("0.25")
 print(result)  # 0.75000000 BTC
+
+# Arithmetic with built-in types (int, float, Decimal)
+from decimal import Decimal
+
+btc = BTC("1.0")
+print(btc + 0.5)            # 1.50000000 BTC (added float)
+print(btc + 2)              # 3.00000000 BTC (added int)
+print(btc + Decimal("0.5")) # 1.50000000 BTC (added Decimal)
+print(2 * btc)              # 2.00000000 BTC (int * BTC)
+print(10 - BTC("2.5"))      # 7.50000000 BTC (int - BTC)
 
 # Different currencies maintain their own precision
 usdc = USDC("100")
