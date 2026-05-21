@@ -50,7 +50,7 @@ class CurrencyAmount:
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.to_decimal()})"
+        return f"{self._code}({self.to_decimal()})"
 
     @classmethod
     def _is_compatible(cls, other: Any) -> bool:
@@ -167,7 +167,7 @@ class CurrencyAmount:
         if cls._is_instance_compatible(value):
             return cls(value)
         raise ValueError(
-            f"Expected str, int, float, Decimal or {cls.__name__}, got {type(value).__name__}"
+            f"Expected str, int, float, Decimal or {cls._code}, got {type(value).__name__}"
         )
 
     @staticmethod

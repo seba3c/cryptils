@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from cryptils import BTC, ETH
+from cryptils import ETH, BTCAmount
 
 
 def test_eth_name():
@@ -183,8 +183,8 @@ def test_eth_equality_with_same_class():
 
 
 def test_eth_equality_with_different_class():
-    assert (ETH("1.5") == BTC("1.5")) is False
-    assert (BTC("1.5") == ETH("1.5")) is False
+    assert (ETH("1.5") == BTCAmount("1.5")) is False
+    assert (BTCAmount("1.5") == ETH("1.5")) is False
 
 
 def test_eth_inequality_with_int():

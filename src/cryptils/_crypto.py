@@ -12,7 +12,7 @@ class CryptoAmount(CurrencyAmount):
         super().__init__(value)
 
 
-class BTC(CryptoAmount):
+class BTCAmount(CryptoAmount):
     _name = "Bitcoin"
     _code = "BTC"
     _decimals = 8

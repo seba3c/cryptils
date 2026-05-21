@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from cryptils import BTC, USDC
+from cryptils import USDC, BTCAmount
 
 
 def test_usdc_name():
@@ -183,8 +183,8 @@ def test_usdc_equality_with_same_class():
 
 
 def test_usdc_equality_with_different_class():
-    assert (USDC("1.5") == BTC("1.5")) is False
-    assert (BTC("1.5") == USDC("1.5")) is False
+    assert (USDC("1.5") == BTCAmount("1.5")) is False
+    assert (BTCAmount("1.5") == USDC("1.5")) is False
 
 
 def test_usdc_inequality_with_int():

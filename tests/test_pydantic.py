@@ -3,11 +3,11 @@ from decimal import Decimal
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from cryptils import BTC, ETH, USDC, USDT
+from cryptils import ETH, USDC, USDT, BTCAmount
 
 
 class WalletBalanceDetail(BaseModel):
-    btc: BTC
+    btc: BTCAmount
     eth: ETH
     usdc: USDC
     usdt: USDT
@@ -39,11 +39,11 @@ def _create_wallet(**kwargs):
 @pytest.mark.parametrize(
     "field, value, expected",
     [
-        ("btc", "1.5", BTC("1.5")),
-        ("btc", 1, BTC("1")),
-        ("btc", 1.5, BTC("1.5")),
-        ("btc", Decimal("1.5"), BTC("1.5")),
-        ("btc", BTC("1.5"), BTC("1.5")),
+        ("btc", "1.5", BTCAmount("1.5")),
+        ("btc", 1, BTCAmount("1")),
+        ("btc", 1.5, BTCAmount("1.5")),
+        ("btc", Decimal("1.5"), BTCAmount("1.5")),
+        ("btc", BTCAmount("1.5"), BTCAmount("1.5")),
         ("eth", "2.0", ETH("2.0")),
         ("eth", 2, ETH("2")),
         ("eth", Decimal("2.0"), ETH("2.0")),
@@ -64,7 +64,7 @@ def test_invalid_cross_currency():
     assert "Expected str, int, float, Decimal or BTC, got ETH" in str(exc_info.value)
 
     with pytest.raises(ValidationError) as exc_info:
-        _create_wallet(balances={"eth": BTC("1.5")})
+        _create_wallet(balances={"eth": BTCAmount("1.5")})
     assert "Expected str, int, float, Decimal or ETH, got BTC" in str(exc_info.value)
 
 
