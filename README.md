@@ -1,16 +1,14 @@
 <div align="center">
   <h1>cryptils</h1>
-  <p>
+  <div>
     <img src="https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg" alt="Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
     <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases" alt="PyPI">
     <img src="https://img.shields.io/badge/testpypi-v0.1.0a1-blue" alt="TestPyPI">
-  </p>
+  </div>
   <em>An utility library for representing cryptocurrency amounts in Python.</em>
 </div>
-
----
 
 ## Installation
 
