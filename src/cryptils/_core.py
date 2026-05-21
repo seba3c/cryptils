@@ -7,8 +7,8 @@ from cryptils._currency import Currency
 
 try:
     from pydantic_core import core_schema as cs
-except ImportError:
-    cs = None
+except ImportError:  # pragma: no cover
+    cs = None  # pragma: no cover
 
 
 _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
@@ -155,7 +155,7 @@ class CurrencyAmount:
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: Any) -> Any:
         if cs is None:
-            raise RuntimeError("pydantic is required for this feature")
+            raise RuntimeError("pydantic is required for this feature")  # pragma: no cover
         return cs.no_info_after_validator_function(
             cls.__pydantic_validate,
             cs.any_schema(),
