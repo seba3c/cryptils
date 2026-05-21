@@ -1,8 +1,5 @@
 <div align="center">
-  <h1>
-
-    cryptils
-  </h1>
+  <h1>cryptils</h1>
   <p>
     <img src="https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg" alt="Tests">
     <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
