@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from ._core import CurrencyAmount
+from ._currency import Currency
 
 
 class CryptoAmount(CurrencyAmount):
@@ -13,24 +14,16 @@ class CryptoAmount(CurrencyAmount):
 
 
 class BTCAmount(CryptoAmount):
-    _name = "Bitcoin"
-    _code = "BTC"
-    _decimals = 8
+    _currency = Currency.BTC
 
 
 class ETHAmount(CryptoAmount):
-    _name = "Ethereum"
-    _code = "ETH"
-    _decimals = 18
+    _currency = Currency.ETH
 
 
 class USDCAmount(CryptoAmount):
-    _name = "USD Coin"
-    _code = "USDC"
-    _decimals = 6
+    _currency = Currency.USDC
 
 
 class USDTAmount(CryptoAmount):
-    _name = "Tether"
-    _code = "USDT"
-    _decimals = 6
+    _currency = Currency.USDT

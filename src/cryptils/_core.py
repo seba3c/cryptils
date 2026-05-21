@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, ClassVar, TypeAlias
+
+from cryptils._currency import Currency
 
 try:
     from pydantic_core import core_schema as cs
@@ -14,17 +16,19 @@ _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
 class CurrencyAmount:
-    _name: ClassVar[str]
-    _code: ClassVar[str]
-    _decimals: ClassVar[int]
+    _currency: ClassVar[Currency]
 
     @property
     def name(self) -> str:
-        return self._name
+        return self._currency.name
 
     @property
     def code(self) -> str:
-        return self._code
+        return self._currency.code
+
+    @property
+    def decimals(self) -> int:
+        return self._currency.decimals
 
     def __init__(self, value: Any) -> None:
         if type(self) is CurrencyAmount:
@@ -35,13 +39,15 @@ class CurrencyAmount:
             self._value = self._to_decimal(value)
 
     def _to_decimal(self, value: _arithmetic_comparison_compatible) -> Decimal:
-        return Decimal(value).quantize(Decimal(10) ** -self._decimals)
+        return Decimal(value).quantize(
+            Decimal(10) ** -self._currency.decimals, rounding=ROUND_HALF_UP
+        )
 
     def to_decimal(self) -> Decimal:
         return self._value
 
     def to_string(self) -> str:
-        return f"{self._code} {self._value}"
+        return f"{self.code} {self._value}"
 
     def to_float(self) -> float:
         return float(self._value)
@@ -50,7 +56,7 @@ class CurrencyAmount:
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self._code}({self.to_decimal()})"
+        return f"{self.code}({self.to_decimal()})"
 
     @classmethod
     def _is_compatible(cls, other: Any) -> bool:
@@ -167,7 +173,7 @@ class CurrencyAmount:
         if cls._is_instance_compatible(value):
             return cls(value)
         raise ValueError(
-            f"Expected str, int, float, Decimal or {cls._code}, got {type(value).__name__}"
+            f"Expected str, int, float, Decimal or {cls._currency.code}, got {type(value).__name__}"
         )
 
     @staticmethod
@@ -178,6 +184,6 @@ class CurrencyAmount:
     def __get_pydantic_json_schema__(cls, core_schema: Any, handler: Any) -> Any:
         json_schema = handler(core_schema)
         json_schema = handler.resolve_ref_schema(json_schema)
-        json_schema["title"] = f"{cls._code} amount"
-        json_schema["description"] = f"{cls._name} amount as a string, int or float"
+        json_schema["title"] = f"{cls._currency.code} amount"
+        json_schema["description"] = f"{cls._currency.name} amount as a string, int or float"
         return json_schema
