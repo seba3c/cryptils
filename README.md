@@ -89,6 +89,8 @@ uv sync
 
 # Run tests
 uv run pytest
+# Run tests with coverage
+uv run pytest --cov
 
 # Run tests across all supported Python versions
 uv run tox
