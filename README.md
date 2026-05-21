@@ -2,12 +2,12 @@
   <h1>cryptils</h1>
   <div>
     <img src="https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg" alt="Tests">
-    <img src="https://img.shields.io/badge/coverage-90%25-brightgreen" alt="Coverage">
+    <img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
     <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases" alt="PyPI">
-    <img src="https://img.shields.io/badge/testpypi-v0.1.0a1-blue" alt="TestPyPI">
+    <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases&pypi_base=https://test.pypi.org/simple&label=testpypi" alt="TestPyPI">
   </div>
-  <em>An utility library for representing cryptocurrency amounts in Python.</em>
+  <em>A utility library for representing cryptocurrency and fiat amounts in Python.</em>
 </div>
 
 ## Installation
@@ -19,7 +19,7 @@ pip install cryptils
 ## Quick Start
 
 ```python
-from cryptils import BTCAmount, ETHAmount, USDCAmount, USDTAmount
+from cryptils import BTCAmount, ETHAmount, USDCAmount, USDTAmount, USDAmount, JPYAmount
 
 # Create amounts with exact decimal precision
 btc = BTCAmount("1.5")
@@ -50,33 +50,44 @@ print(usdc)  # 100.000000 USDC
 print(btc.to_decimal())  # Decimal('1.50000000')
 
 # Get the formatted string explicitly
-print(btc.to_string())  # 1.50000000 BTC
+print(btc.to_string())  # BTC 1.50000000
+
+# Fiat amounts with proper precision
+usd = USDAmount("99.99")
+print(usd)              # 99.99
+print(usd.to_string())  # USD 99.99
+
+jpy = JPYAmount("150")
+print(jpy)              # 150
+print(jpy.to_string())  # JPY 150
 ```
 
 ## Features
 
 - Uses `decimal.Decimal` internally to avoid floating-point errors.
 - Consistent precision handling per currency (e.g., 8 decimals for BTC, 6 for USDC).
+- Full fiat currency support (USD, EUR, GBP, JPY, etc.) with correct decimal precision.
 - Simple, explicit API designed for financial precision.
 
 ## Pydantic Support
 
-CryptoAmount subclasses work as Pydantic v2 field types:
+CurrencyAmount subclasses (crypto and fiat) work as Pydantic v2 field types:
 
 ```python
 from pydantic import BaseModel
-from cryptils import BTCAmount, ETHAmount, USDCAmount
+from cryptils import BTCAmount, ETHAmount, USDCAmount, USDAmount
 
 
 class WalletBalance(BaseModel):
     btc: BTCAmount
     eth: ETHAmount
     usdc: USDCAmount
+    usd: USDAmount
 
 
-wallet = WalletBalance(btc="1.5", eth=2, usdc=100.0)
+wallet = WalletBalance(btc="1.5", eth=2, usdc=100.0, usd="99.99")
 print(wallet.model_dump_json())
-# {"btc":"1.50000000","eth":"2.000000000000000000","usdc":"100.000000"}
+# {"btc":"1.50000000","eth":"2.000000000000000000","usdc":"100.000000","usd":"99.99"}
 ```
 
 Requires Pydantic v2 (`pip install pydantic`).

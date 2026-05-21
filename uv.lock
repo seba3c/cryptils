@@ -144,7 +144,7 @@ toml = [
 
 [[package]]
 name = "cryptils"
-version = "0.1.0a5"
+version = "0.1.0b1"
 source = { editable = "." }
 
 [package.optional-dependencies]
