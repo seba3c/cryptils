@@ -1,7 +1,6 @@
 <div align="center">
   <h1>
-    <img src="https://cdn.simpleicons.org/bitcoin/F7931A" width="64" height="64" alt="BTC icon">
-    <br>
+
     cryptils
   </h1>
   <p>
@@ -13,6 +12,8 @@
   </p>
   <em>An utility library for representing cryptocurrency amounts in Python.</em>
 </div>
+
+---
 
 ## Installation
 
