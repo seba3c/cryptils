@@ -13,7 +13,7 @@ _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount:
+class CurrencyAmount:
     _name: ClassVar[str]
     _code: ClassVar[str]
     _decimals: ClassVar[int]
@@ -27,8 +27,8 @@ class CryptoAmount:
         return self._code
 
     def __init__(self, value: Any) -> None:
-        if type(self) is CryptoAmount:
-            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated")
+        if type(self) is CurrencyAmount:
+            raise TypeError("CurrencyAmount is an abstract class and cannot be instantiated")
         if isinstance(value, self.__class__):
             self._value = value._value
         else:
@@ -100,46 +100,46 @@ class CryptoAmount:
     def __hash__(self) -> int:
         return hash((self.__class__, self._value))
 
-    def __add__(self, other: Any) -> CryptoAmount:
+    def __add__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             return self.__class__(self._value + other._value)
         if self._is_compatible(other):
             return self.__class__(self._value + self._to_decimal(other))
         return NotImplemented
 
-    def __radd__(self, other: Any) -> CryptoAmount:
+    def __radd__(self, other: Any) -> CurrencyAmount:
         return self.__add__(other)
 
-    def __sub__(self, other: Any) -> CryptoAmount:
+    def __sub__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             return self.__class__(self._value - other._value)
         if self._is_compatible(other):
             return self.__class__(self._value - self._to_decimal(other))
         return NotImplemented
 
-    def __rsub__(self, other: Any) -> CryptoAmount:
+    def __rsub__(self, other: Any) -> CurrencyAmount:
         if self._is_compatible(other):
             return self.__class__(self._to_decimal(other) - self._value)
         return NotImplemented
 
-    def __mul__(self, other: Any) -> CryptoAmount:
+    def __mul__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             raise TypeError(f"Cannot multiply two {type(self).__name__} instances")
         if self._is_compatible(other):
             return self.__class__(self._value * self._to_decimal(other))
         return NotImplemented
 
-    def __rmul__(self, other: Any) -> CryptoAmount:
+    def __rmul__(self, other: Any) -> CurrencyAmount:
         return self.__mul__(other)
 
-    def __truediv__(self, other: Any) -> CryptoAmount:
+    def __truediv__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             raise TypeError(f"Cannot divide two {type(self).__name__} instances")
         if self._is_compatible(other):
             return self.__class__(self._value / self._to_decimal(other))
         return NotImplemented
 
-    def __rtruediv__(self, other: Any) -> CryptoAmount:
+    def __rtruediv__(self, other: Any) -> CurrencyAmount:
         if self._is_compatible(other):
             return self.__class__(self._to_decimal(other) / self._value)
         return NotImplemented
@@ -161,7 +161,7 @@ class CryptoAmount:
         )
 
     @classmethod
-    def __pydantic_validate(cls, value: Any) -> CryptoAmount:
+    def __pydantic_validate(cls, value: Any) -> CurrencyAmount:
         if isinstance(value, cls):
             return value
         if cls._is_instance_compatible(value):
@@ -171,7 +171,7 @@ class CryptoAmount:
         )
 
     @staticmethod
-    def __pydantic_serialize(value: CryptoAmount) -> str:
+    def __pydantic_serialize(value: CurrencyAmount) -> str:
         return str(value)
 
     @classmethod
