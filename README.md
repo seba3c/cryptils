@@ -19,13 +19,13 @@ pip install cryptils
 ## Quick Start
 
 ```python
-from cryptils import BTCAmount, ETH, USDC, USDT
+from cryptils import BTCAmount, ETHAmount, USDCAmount, USDTAmount
 
 # Create amounts with exact decimal precision
 btc = BTCAmount("1.5")
 print(btc)  # 1.50000000 BTC
 
-eth = ETH("2.0")
+eth = ETHAmount("2.0")
 print(eth)  # 2.000000000000000000 ETH
 
 # Arithmetic with other amounts
@@ -43,7 +43,7 @@ print(2 * btc)  # 2.00000000 BTC (int * BTC)
 print(10 - BTCAmount("2.5"))  # 7.50000000 BTC (int - BTC)
 
 # Different currencies maintain their own precision
-usdc = USDC("100")
+usdc = USDCAmount("100")
 print(usdc)  # 100.000000 USDC
 
 # Access the raw Decimal value
@@ -65,13 +65,13 @@ CryptoAmount subclasses work as Pydantic v2 field types:
 
 ```python
 from pydantic import BaseModel
-from cryptils import BTCAmount, ETH, USDC
+from cryptils import BTCAmount, ETHAmount, USDCAmount
 
 
 class WalletBalance(BaseModel):
     btc: BTCAmount
-    eth: ETH
-    usdc: USDC
+    eth: ETHAmount
+    usdc: USDCAmount
 
 
 wallet = WalletBalance(btc="1.5", eth=2, usdc=100.0)

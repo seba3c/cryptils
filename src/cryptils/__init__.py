@@ -1,3 +1,3 @@
-from ._crypto import ETH, USDC, USDT, BTCAmount
+from ._crypto import BTCAmount, ETHAmount, USDCAmount, USDTAmount
 
-__all__ = ["ETH", "USDC", "USDT", "BTCAmount"]
+__all__ = ["BTCAmount", "ETHAmount", "USDCAmount", "USDTAmount"]

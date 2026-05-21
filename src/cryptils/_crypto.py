@@ -18,19 +18,19 @@ class BTCAmount(CryptoAmount):
     _decimals = 8
 
 
-class ETH(CryptoAmount):
+class ETHAmount(CryptoAmount):
     _name = "Ethereum"
     _code = "ETH"
     _decimals = 18
 
 
-class USDC(CryptoAmount):
+class USDCAmount(CryptoAmount):
     _name = "USD Coin"
     _code = "USDC"
     _decimals = 6
 
 
-class USDT(CryptoAmount):
+class USDTAmount(CryptoAmount):
     _name = "Tether"
     _code = "USDT"
     _decimals = 6
