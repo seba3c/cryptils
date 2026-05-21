@@ -1,47 +1,53 @@
 from __future__ import annotations
 
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, ClassVar, TypeAlias
+
+from cryptils._currency import Currency
 
 try:
     from pydantic_core import core_schema as cs
-except ImportError:
-    cs = None
+except ImportError:  # pragma: no cover
+    cs = None  # pragma: no cover
 
 
 _arithmetic_comparison_compatible: TypeAlias = Decimal | int | float
 _instance_compatible: TypeAlias = _arithmetic_comparison_compatible | str
 
 
-class CryptoAmount:
-    _name: ClassVar[str]
-    _code: ClassVar[str]
-    _decimals: ClassVar[int]
+class CurrencyAmount:
+    _currency: ClassVar[Currency]
 
     @property
     def name(self) -> str:
-        return self._name
+        return self._currency.name
 
     @property
     def code(self) -> str:
-        return self._code
+        return self._currency.code
+
+    @property
+    def decimals(self) -> int:
+        return self._currency.decimals
 
     def __init__(self, value: Any) -> None:
-        if type(self) is CryptoAmount:
-            raise TypeError("CryptoAmount is an abstract class and cannot be instantiated")
+        if type(self) is CurrencyAmount:
+            raise TypeError("CurrencyAmount is an abstract class and cannot be instantiated")
         if isinstance(value, self.__class__):
             self._value = value._value
         else:
             self._value = self._to_decimal(value)
 
     def _to_decimal(self, value: _arithmetic_comparison_compatible) -> Decimal:
-        return Decimal(value).quantize(Decimal(10) ** -self._decimals)
+        return Decimal(value).quantize(
+            Decimal(10) ** -self._currency.decimals, rounding=ROUND_HALF_UP
+        )
 
     def to_decimal(self) -> Decimal:
         return self._value
 
     def to_string(self) -> str:
-        return f"{self._code} {self._value}"
+        return f"{self.code} {self._value}"
 
     def to_float(self) -> float:
         return float(self._value)
@@ -50,7 +56,7 @@ class CryptoAmount:
         return str(self._value)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.to_decimal()})"
+        return f"{self.code}({self.to_decimal()})"
 
     @classmethod
     def _is_compatible(cls, other: Any) -> bool:
@@ -100,46 +106,46 @@ class CryptoAmount:
     def __hash__(self) -> int:
         return hash((self.__class__, self._value))
 
-    def __add__(self, other: Any) -> CryptoAmount:
+    def __add__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             return self.__class__(self._value + other._value)
         if self._is_compatible(other):
             return self.__class__(self._value + self._to_decimal(other))
         return NotImplemented
 
-    def __radd__(self, other: Any) -> CryptoAmount:
+    def __radd__(self, other: Any) -> CurrencyAmount:
         return self.__add__(other)
 
-    def __sub__(self, other: Any) -> CryptoAmount:
+    def __sub__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             return self.__class__(self._value - other._value)
         if self._is_compatible(other):
             return self.__class__(self._value - self._to_decimal(other))
         return NotImplemented
 
-    def __rsub__(self, other: Any) -> CryptoAmount:
+    def __rsub__(self, other: Any) -> CurrencyAmount:
         if self._is_compatible(other):
             return self.__class__(self._to_decimal(other) - self._value)
         return NotImplemented
 
-    def __mul__(self, other: Any) -> CryptoAmount:
+    def __mul__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             raise TypeError(f"Cannot multiply two {type(self).__name__} instances")
         if self._is_compatible(other):
             return self.__class__(self._value * self._to_decimal(other))
         return NotImplemented
 
-    def __rmul__(self, other: Any) -> CryptoAmount:
+    def __rmul__(self, other: Any) -> CurrencyAmount:
         return self.__mul__(other)
 
-    def __truediv__(self, other: Any) -> CryptoAmount:
+    def __truediv__(self, other: Any) -> CurrencyAmount:
         if isinstance(other, self.__class__):
             raise TypeError(f"Cannot divide two {type(self).__name__} instances")
         if self._is_compatible(other):
             return self.__class__(self._value / self._to_decimal(other))
         return NotImplemented
 
-    def __rtruediv__(self, other: Any) -> CryptoAmount:
+    def __rtruediv__(self, other: Any) -> CurrencyAmount:
         if self._is_compatible(other):
             return self.__class__(self._to_decimal(other) / self._value)
         return NotImplemented
@@ -149,7 +155,7 @@ class CryptoAmount:
     @classmethod
     def __get_pydantic_core_schema__(cls, source: type[Any], handler: Any) -> Any:
         if cs is None:
-            raise RuntimeError("pydantic is required for this feature")
+            raise RuntimeError("pydantic is required for this feature")  # pragma: no cover
         return cs.no_info_after_validator_function(
             cls.__pydantic_validate,
             cs.any_schema(),
@@ -161,23 +167,23 @@ class CryptoAmount:
         )
 
     @classmethod
-    def __pydantic_validate(cls, value: Any) -> CryptoAmount:
+    def __pydantic_validate(cls, value: Any) -> CurrencyAmount:
         if isinstance(value, cls):
             return value
         if cls._is_instance_compatible(value):
             return cls(value)
         raise ValueError(
-            f"Expected str, int, float, Decimal or {cls.__name__}, got {type(value).__name__}"
+            f"Expected str, int, float, Decimal or {cls._currency.code}, got {type(value).__name__}"
         )
 
     @staticmethod
-    def __pydantic_serialize(value: CryptoAmount) -> str:
+    def __pydantic_serialize(value: CurrencyAmount) -> str:
         return str(value)
 
     @classmethod
     def __get_pydantic_json_schema__(cls, core_schema: Any, handler: Any) -> Any:
         json_schema = handler(core_schema)
         json_schema = handler.resolve_ref_schema(json_schema)
-        json_schema["title"] = f"{cls._code} amount"
-        json_schema["description"] = f"{cls._name} amount as a string, int or float"
+        json_schema["title"] = f"{cls._currency.code} amount"
+        json_schema["description"] = f"{cls._currency.name} amount as a string, int or float"
         return json_schema
