@@ -4,8 +4,8 @@
     <img src="https://github.com/seba3c/cryptils/actions/workflows/tests.yml/badge.svg" alt="Tests">
     <img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage">
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
-    <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases" alt="PyPI">
-    <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases&pypi_base=https://test.pypi.org/simple&label=testpypi" alt="TestPyPI">
+    <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases=true" alt="PyPI">
+    <img src="https://img.shields.io/pypi/v/cryptils?include_prereleases=true&pypi_base=https://test.pypi.org/simple&label=testpypi" alt="TestPyPI">
   </div>
   <em>A utility library for representing cryptocurrency and fiat amounts in Python.</em>
 </div>
